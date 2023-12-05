@@ -1,7 +1,11 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.measureTime
 
+class SeedMap(val dest: Long, val source: Long, val range: Long) {
+
+}
 fun main() {
     var headers = listOf("seed-to-soil map:", "soil-to-fertilizer map:", "fertilizer-to-water map:", "water-to-light map:", "light-to-temperature map:", "temperature-to-humidity map:", "humidity-to-location map:")
     fun parseValue(input: List<String>, key: Long, header: String): Long {
@@ -69,18 +73,7 @@ fun main() {
     }
 
 
-    fun checkFirstStep(input: List<String>, seedRange: LongRange): Boolean {
-        var left: Int
-        var right: Int
-        var seedShouldBeChecked = false
-        for (i in (input.indexOf(headers[0]) + 1)..<input.size) {
-            if (input[i] == "") break
-            var (dest, source, range) = input[i].split(" ").map{it.toLong()}
-            if (seedRange.last < source || seedRange.first > source + range) continue
-            seedShouldBeChecked = true
-        }
-        return seedShouldBeChecked
-    }
+    val dict: MutableMap<String, MutableList<SeedMap>> = HashMap()
     fun part2(input: List<String>): Long {
         val initialSeeds = input[0].split(": ")[1].split(" ").map { it.toLong() }
         val rangeList: MutableList<LongRange> = ArrayList()
@@ -88,20 +81,28 @@ fun main() {
             rangeList.add((initialSeeds[i]..<initialSeeds[i] + initialSeeds[i+1]))
         }
         rangeList.println()
-        var minValue: Long = 63000000
+        //Create mapping of which number corresponds to which number
+        for (header in headers.reversed()) {
+            dict[header] = arrayListOf()
+            for (row in (input.indexOf(header) + 1)..<input.size) {
+                if (input[row] == "" || row == input.size - 1) {
+                    break
+                }
+                val (dest, source, range) = input[row].split(" ").map { it.toLong() }
+                dict[header]?.add(SeedMap(dest, source, range))
+            }
+        }
+
+        var minValue: Long = 0
         while (true) {
             var value = minValue
-            "Curent value $value".println()
+//            "Curent value $value".println()
             for (header in headers.reversed()) {
-                for (row in (input.indexOf(header) + 1)..<input.size) {
-                    if (input[row] == "" || row == input.size - 1) {
-                        break
-                    }
-                    val (dest, source, range) = input[row].split(" ").map{it.toLong()}
-                    if (value >= dest && value < dest + range)
+                for (map in dict[header]!!) {
+                    if (value >= map.dest && value < map.dest + map.range)
                     {
 //                        "Dest header $header with value $value maps to ${source + value - dest}".println()
-                        value = source + (value - dest)
+                        value = map.source + (value - map.dest)
                         break
                     }
                 }
@@ -124,6 +125,7 @@ fun main() {
 
     val input = readInput("Day05")
 //    part1(input).println()
-    part2(input).println()
+    val time = measureTime{part2(input).println()}
+    "Time: $time.inWholeSeconds".println()
 
 }
