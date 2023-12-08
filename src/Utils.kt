@@ -30,3 +30,22 @@ fun String.replaceToDigit(): String {
     }
     return newString
 }
+
+fun gcd(a: Long, b: Long): Long {
+    return if (b == 0L) a  else gcd(b, a%b)
+}
+
+fun gcd(a: Int, b: Int): Int {
+    return if (b == 0) a  else gcd(b, a%b)
+}
+
+fun lcm(a: Long, b: Long): Number {
+    return a*b/gcd(a, b)
+}
+fun lcmOfList(list: List<Long>): Long {
+    var retValue = 1L
+    for (i in list) {
+        retValue = retValue * i / gcd(retValue, i)
+    }
+    return retValue
+}

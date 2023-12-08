@@ -56,7 +56,6 @@ fun findTypeOfCard(input: String): HandType {
         if (!num.contains(1)) HandType.FULL
         else HandType.THREE
     }
-    //this will never have 2 J, because if so, the two J will combine with another character to create FULL or THREE
     else if (num.contains(2)) {
         if (num.count{it == 2} == 2) HandType.TWO
         else HandType.ONE
