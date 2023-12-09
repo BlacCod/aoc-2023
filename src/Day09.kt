@@ -61,10 +61,9 @@ fun main() {
                     (top.first - lastDiff).println()
                     sum += top.first - lastDiff
                 }
-                if (lastDiff == 0L) {
-                    lastDiff = top.first
-                }
-                else lastDiff = top.first - lastDiff
+                lastDiff = if (lastDiff == 0L) {
+                    top.first
+                } else top.first - lastDiff
             }
         }
 
