@@ -3,7 +3,7 @@ import kotlin.collections.ArrayList
 
 fun main() {
 
-    fun findDifference(seq: MutableList<Long>): MutableList<Long> {
+    fun  findDifference(seq: MutableList<Long>): MutableList<Long> {
         var result: MutableList<Long> = ArrayList()
         for (i in 0..<seq.size - 1) {
             result.add(seq[i+1] - seq[i])
