@@ -49,3 +49,19 @@ fun lcmOfList(list: List<Long>): Long {
     }
     return retValue
 }
+
+fun <T> MutableList<MutableList<T>>.copy(): MutableList<MutableList<T>> {
+    var tmp: MutableList<MutableList<T>> = ArrayList()
+    for (i in this.indices) {
+        var tmp2: MutableList<T> = ArrayList()
+        for (j in this[i].indices) {
+            tmp2.add(this[i][j])
+        }
+        tmp.add(tmp2)
+    }
+    return tmp
+}
+
+fun <T> MutableList<MutableList<T>>.println() {
+    for (line in this) line.println()
+}
