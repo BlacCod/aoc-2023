@@ -2,12 +2,15 @@ import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.floor
 
+// after reading the megathread, I think there are some alternative solutions:
+// to deal with the vertical reflection, just transpose the matrix then reuse the horizontal check
+// instead of moving the reflection line, we can remove one row at a time, then check if the remaining one is reflective (or use two pointer)
 
 fun main() {
 
     fun part1(input: List<String>): Long {
         var arr: MutableList<MutableList<Char>> = ArrayList()
-        fun findBound(arr: MutableList<MutableList<Char>>): Double {
+        fun findReflection(arr: MutableList<MutableList<Char>>): Double {
             var middleRowLine: Double = 0.5
             while (middleRowLine < arr.size - 1) {
                 var upperPtr = floor(middleRowLine)
@@ -55,7 +58,7 @@ fun main() {
             if (line == "" || (i + 1) == input.size) {
                 if (i+1 == input.size) arr.add(line.toCharArray().toMutableList())
                 arr.println()
-                sum += findBound(arr).toInt()
+                sum += findReflection(arr).toInt()
                 arr = ArrayList()
             }
             else arr.add(line.toCharArray().toMutableList())
@@ -71,7 +74,7 @@ fun main() {
 
     fun part2(input: List<String>): Long {
         var arr: MutableList<MutableList<Char>> = ArrayList()
-        fun findBound(arr: MutableList<MutableList<Char>>, oldBound: Int): Double {
+        fun findReflection(arr: MutableList<MutableList<Char>>, oldBound: Int): Double {
             var middleRowLine: Double = 0.5
             while (middleRowLine < arr.size - 1) {
                 var upperPtr = floor(middleRowLine)
@@ -122,14 +125,14 @@ fun main() {
         }
 
         fun testSmudge(arr: MutableList<MutableList<Char>>): Int {
-            var oldLine = findBound(arr, -1).toInt()
+            var oldLine = findReflection(arr, -1).toInt()
             for (r in arr.indices) {
                 for (c in arr[r].indices) {
                     var tmp = arr.copy()
                     if (tmp[r][c] == '#') tmp[r][c] = '.'
                     else tmp[r][c] = '#'
                     if (r == 2 && c == 11) tmp.println()
-                    var ret = findBound(tmp, oldLine).toInt()
+                    var ret = findReflection(tmp, oldLine).toInt()
                     if (ret != -1 && ret != oldLine) return ret
                 }
             }
