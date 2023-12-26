@@ -3,6 +3,13 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 
+
+enum class Direction {
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
+}
 /**
  * Reads lines from the given input txt file.
  */
@@ -64,4 +71,30 @@ fun <T> MutableList<MutableList<T>>.copy(): MutableList<MutableList<T>> {
 
 fun <T> MutableList<MutableList<T>>.println() {
     for (line in this) line.println()
+}
+
+class Pair<X, Y>(var first: X, var second: Y) {
+    operator fun component1(): X {
+        return first
+    }
+
+    operator fun component2(): Y {
+        return second
+    }
+}
+
+class Triple<X, Y, Z>(var first: X, var second: Y, var third: Z) {
+    operator fun component1(): X = first
+    operator fun component2(): Y = second
+    operator fun component3(): Z = third
+
+    public override fun toString(): String = "($first, $second, $third)"
+}
+fun <T> MutableList<MutableList<T>>.isInBound(i: Int, j: Int): Boolean {
+    try {
+        this[i][j]
+        return true
+    } catch (e: Exception) {
+        return false
+    }
 }
